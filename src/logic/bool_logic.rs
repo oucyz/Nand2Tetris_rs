@@ -1,3 +1,6 @@
+pub type Word = [u8; 16];
+pub type Word8 = [u8; 8];
+
 pub fn n_and(a: u8, b: u8) -> u8 {
     if a == 1 && b == 1{
         0
@@ -28,11 +31,10 @@ pub fn mux(a: u8, b: u8, sel: u8) -> u8 {
     or(and(a, not(sel)), and(b, sel))
 }
 
-pub fn demux(in_a: u8, sel: u8) -> (u8, u8) {
-    (and(in_a, not(sel)), and(in_a, sel))
+pub fn demux(in_a: u8, sel: u8) -> [u8; 2] {
+    [and(in_a, not(sel)), and(in_a, sel)]
 }
 
-pub type Word = [u8; 16];
 
 pub fn not16(a: Word) -> Word{
     [
@@ -70,7 +72,6 @@ pub fn mux16(a: Word, b: Word, sel: u8) -> Word{
     ]
 }
 
-pub type Word8 = [u8; 8];
 pub fn or8way(a: Word8) -> u8{
     or(or(or(or(or(or(or(a[0], a[1]), a[2]), a[3]), a[4]), a[5]), a[6]), a[7])
 }
@@ -85,4 +86,24 @@ pub fn mux8way16(a: [Word; 8], sel: [u8; 3]) -> Word{
         mux4way16([a[4], a[5], a[6], a[7]], [sel[0], sel[1]]),
         sel[2]
     )
+}
+
+pub fn demux4way(in_a: u8, sel: [u8; 2]) -> [u8; 4]{
+    let [ab, cd] = demux(in_a, sel[1]);
+    let [a, b] = demux(ab, sel[0]);
+    let [c, d] = demux(cd, sel[0]);
+    [a, b, c, d]
+    // [
+    //     demux(demux(in_a, sel[1])[0], sel[0])[0],
+    //     demux(demux(in_a, sel[1])[0], sel[0])[1],
+    //     demux(demux(in_a, sel[1])[1], sel[0])[0],
+    //     demux(demux(in_a, sel[1])[1], sel[0])[1]
+    // ]
+}
+
+pub fn demux8way(in_a: u8, sel: [u8; 3]) -> [u8; 8]{
+    let [abcd, efgh] = demux(in_a, sel[2]);
+    let [a, b, c, d] = demux4way(abcd, [sel[0], sel[1]]);
+    let [e, f, g, h] = demux4way(efgh, [sel[0], sel[1]]);
+    [a, b, c, d, e, f, g, h]
 }

@@ -53,10 +53,10 @@ fn mux_test() {
 
 #[test]
 fn demux_test() {
-    assert_eq!(bool_logic::demux(0, 0), (0, 0));
-    assert_eq!(bool_logic::demux(1, 0), (1, 0));
-    assert_eq!(bool_logic::demux(0, 1), (0, 0));
-    assert_eq!(bool_logic::demux(1, 1), (0, 1));
+    assert_eq!(bool_logic::demux(0, 0), [0, 0]);
+    assert_eq!(bool_logic::demux(1, 0), [1, 0]);
+    assert_eq!(bool_logic::demux(0, 1), [0, 0]);
+    assert_eq!(bool_logic::demux(1, 1), [0, 1]);
 }
 
 #[test]
@@ -267,4 +267,36 @@ fn mux8way16_test() {
         [1, 1, 1]),
         [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0]
     );
+}
+
+#[test]
+fn demux4way_test() {
+    assert_eq!(bool_logic::demux4way(0, [0, 0]), [0, 0, 0, 0]);
+    assert_eq!(bool_logic::demux4way(1, [0, 0]), [1, 0, 0, 0]);
+    assert_eq!(bool_logic::demux4way(0, [1, 0]), [0, 0, 0, 0]);
+    assert_eq!(bool_logic::demux4way(1, [1, 0]), [0, 1, 0, 0]);
+    assert_eq!(bool_logic::demux4way(0, [0, 1]), [0, 0, 0, 0]);
+    assert_eq!(bool_logic::demux4way(1, [0, 1]), [0, 0, 1, 0]);
+    assert_eq!(bool_logic::demux4way(0, [1, 1]), [0, 0, 0, 0]);
+    assert_eq!(bool_logic::demux4way(1, [1, 1]), [0, 0, 0, 1]);
+}
+
+#[test]
+fn demux8way_test() {
+    assert_eq!(bool_logic::demux8way(0, [0, 0, 0]), [0, 0, 0, 0, 0, 0, 0, 0]);
+    assert_eq!(bool_logic::demux8way(1, [0, 0, 0]), [1, 0, 0, 0, 0, 0, 0, 0]);
+    assert_eq!(bool_logic::demux8way(0, [1, 0, 0]), [0, 0, 0, 0, 0, 0, 0, 0]);
+    assert_eq!(bool_logic::demux8way(1, [1, 0, 0]), [0, 1, 0, 0, 0, 0, 0, 0]);
+    assert_eq!(bool_logic::demux8way(0, [0, 1, 0]), [0, 0, 0, 0, 0, 0, 0, 0]);
+    assert_eq!(bool_logic::demux8way(1, [0, 1, 0]), [0, 0, 1, 0, 0, 0, 0, 0]);
+    assert_eq!(bool_logic::demux8way(0, [1, 1, 0]), [0, 0, 0, 0, 0, 0, 0, 0]);
+    assert_eq!(bool_logic::demux8way(1, [1, 1, 0]), [0, 0, 0, 1, 0, 0, 0, 0]);
+    assert_eq!(bool_logic::demux8way(0, [0, 0, 1]), [0, 0, 0, 0, 0, 0, 0, 0]);
+    assert_eq!(bool_logic::demux8way(1, [0, 0, 1]), [0, 0, 0, 0, 1, 0, 0, 0]);
+    assert_eq!(bool_logic::demux8way(0, [1, 0, 1]), [0, 0, 0, 0, 0, 0, 0, 0]);
+    assert_eq!(bool_logic::demux8way(1, [1, 0, 1]), [0, 0, 0, 0, 0, 1, 0, 0]);
+    assert_eq!(bool_logic::demux8way(0, [0, 1, 1]), [0, 0, 0, 0, 0, 0, 0, 0]);
+    assert_eq!(bool_logic::demux8way(1, [0, 1, 1]), [0, 0, 0, 0, 0, 0, 1, 0]);
+    assert_eq!(bool_logic::demux8way(0, [1, 1, 1]), [0, 0, 0, 0, 0, 0, 0, 0]);
+    assert_eq!(bool_logic::demux8way(1, [1, 1, 1]), [0, 0, 0, 0, 0, 0, 0, 1]);
 }
