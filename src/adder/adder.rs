@@ -1,4 +1,4 @@
-use crate::logic::bool_logic::{and, or, xor};
+use crate::logic::bool_logic::{and, not, or, xor, not16, and16, or16, mux16, or8way};
 use crate::given::{Word16, Word8};
 
 pub fn half_adder(a: u8, b: u8) -> [u8; 2]{
@@ -12,7 +12,7 @@ pub fn full_adder(a: u8, b: u8, c: u8) -> [u8; 2]{
 }
 
 pub fn add16(a: Word16, b: Word16) -> Word16{
-    let [carry1, sum0] = half_adder(a[0], b[0]);
+    let [carry1, sum0] = full_adder(a[0], b[0], 0);
     let [carry2, sum1] = full_adder(a[1], b[1], carry1);
     let [carry3, sum2] = full_adder(a[2], b[2], carry2);
     let [carry4, sum3] = full_adder(a[3], b[3], carry3);
@@ -37,3 +37,42 @@ pub fn add16(a: Word16, b: Word16) -> Word16{
     ]
 }
 
+pub fn increment16(a: Word16) -> Word16{
+    add16(a, [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+}
+
+// pub fn alu(x: Word16, y: Word16, zx: u8, nx: u8, zy: u8, ny: u8, f: u8, no: u8) -> Word16{
+//     let x_0 = mux16(x, not16(add16(x, not16(x))), zx);
+//     let x_c = mux16(x_0, not16(x_0), nx);
+    
+//     let y_0 = mux16(y, not16(add16(y, not16(y))), zy);
+//     let y_c = mux16(y_0, not16(y_0), ny);
+
+//     let processed_xy = mux16(and16(x_c, y_c), add16(x_c, y_c), f);
+//     mux16(processed_xy, not16(processed_xy), no)
+// }
+
+pub fn alu(x: Word16, y: Word16, zx: u8, nx: u8, zy: u8, ny: u8, f: u8, no: u8) -> (Word16, u8, u8){
+    let x_0 = mux16(x, not16(add16(x, not16(x))), zx);
+    let x_c = mux16(x_0, not16(x_0), nx);
+    
+    let y_0 = mux16(y, not16(add16(y, not16(y))), zy);
+    let y_c = mux16(y_0, not16(y_0), ny);
+
+    let processed_xy = mux16(and16(x_c, y_c), add16(x_c, y_c), f);
+    let out = mux16(processed_xy, not16(processed_xy), no);
+    let zr = 
+    not(
+        or(
+            or8way(
+                [out[0], out[1], out[2], out[3],
+                out[4], out[5], out[6], out[7]]
+            ),
+            or8way(
+                [out[8], out[9], out[10], out[11],
+                out[12], out[13], out[14], out[15]]
+            )
+        )
+    );
+    (out, zr, out[15])
+}
