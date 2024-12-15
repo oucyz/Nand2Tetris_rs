@@ -1,4 +1,3 @@
-pub mod bit;
 pub mod bool_logic;
 
 #[cfg(test)]
