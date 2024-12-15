@@ -1,13 +1,4 @@
-pub type Word = [u8; 16];
-pub type Word8 = [u8; 8];
-
-pub fn n_and(a: u8, b: u8) -> u8 {
-    if a == 1 && b == 1{
-        0
-    } else {
-        1
-    }
-}
+use crate::given::{n_and, Word16, Word8};
 
 pub fn not(a: u8) -> u8 {
     n_and(a, a)
@@ -36,7 +27,7 @@ pub fn demux(in_a: u8, sel: u8) -> [u8; 2] {
 }
 
 
-pub fn not16(a: Word) -> Word{
+pub fn not16(a: Word16) -> Word16{
     [
         not(a[0]), not(a[1]), not(a[2]), not(a[3]),
         not(a[4]), not(a[5]), not(a[6]), not(a[7]),
@@ -45,7 +36,7 @@ pub fn not16(a: Word) -> Word{
     ]
 }
 
-pub fn and16(a: Word, b: Word) -> Word{
+pub fn and16(a: Word16, b: Word16) -> Word16{
     [
         and(a[0], b[0]), and(a[1], b[1]), and(a[2], b[2]), and(a[3], b[3]),
         and(a[4], b[4]), and(a[5], b[5]), and(a[6], b[6]), and(a[7], b[7]),
@@ -54,7 +45,7 @@ pub fn and16(a: Word, b: Word) -> Word{
     ]
 }
 
-pub fn or16(a: Word, b: Word) -> Word{
+pub fn or16(a: Word16, b: Word16) -> Word16{
     [
         or(a[0], b[0]), or(a[1], b[1]), or(a[2], b[2]), or(a[3], b[3]),
         or(a[4], b[4]), or(a[5], b[5]), or(a[6], b[6]), or(a[7], b[7]),
@@ -63,7 +54,7 @@ pub fn or16(a: Word, b: Word) -> Word{
     ]
 }
 
-pub fn mux16(a: Word, b: Word, sel: u8) -> Word{
+pub fn mux16(a: Word16, b: Word16, sel: u8) -> Word16{
     [
         mux(a[0], b[0], sel), mux(a[1], b[1], sel), mux(a[2], b[2], sel), mux(a[3], b[3], sel),
         mux(a[4], b[4], sel), mux(a[5], b[5], sel), mux(a[6], b[6], sel), mux(a[7], b[7], sel),
@@ -76,11 +67,11 @@ pub fn or8way(a: Word8) -> u8{
     or(or(or(or(or(or(or(a[0], a[1]), a[2]), a[3]), a[4]), a[5]), a[6]), a[7])
 }
 
-pub fn mux4way16(a:[Word; 4], sel: [u8; 2]) -> Word{
+pub fn mux4way16(a:[Word16; 4], sel: [u8; 2]) -> Word16{
     mux16(mux16(a[0], a[1], sel[0]), mux16(a[2], a[3], sel[0]), sel[1])
 }
 
-pub fn mux8way16(a: [Word; 8], sel: [u8; 3]) -> Word{
+pub fn mux8way16(a: [Word16; 8], sel: [u8; 3]) -> Word16{
     mux16(
         mux4way16([a[0], a[1], a[2], a[3]], [sel[0], sel[1]]),
         mux4way16([a[4], a[5], a[6], a[7]], [sel[0], sel[1]]),
