@@ -1,60 +1,302 @@
 use crate::logic::bool_logic;
-use crate::logic::bit::Bit;
+// use crate::logic::bit::Bit;
 
 #[test]
 fn n_and_test() {
-    assert_eq!(bool_logic::n_and(Bit::O, Bit::O), Bit::I);
-    assert_eq!(bool_logic::n_and(Bit::O, Bit::I), Bit::I);
-    assert_eq!(bool_logic::n_and(Bit::I, Bit::O), Bit::I);
-    assert_eq!(bool_logic::n_and(Bit::I, Bit::I), Bit::O);
+    assert_eq!(bool_logic::n_and(0, 0), 1);
+    assert_eq!(bool_logic::n_and(0, 1), 1);
+    assert_eq!(bool_logic::n_and(1, 0), 1);
+    assert_eq!(bool_logic::n_and(1, 1), 0);
 }
 
 #[test]
 fn not_test() {
-    assert_eq!(bool_logic::not(Bit::O), Bit::I);
-    assert_eq!(bool_logic::not(Bit::I), Bit::O);
+    assert_eq!(bool_logic::not(0), 1);
+    assert_eq!(bool_logic::not(1), 0);
 }
 
 #[test]
 fn and_test() {
-    assert_eq!(bool_logic::and(Bit::O, Bit::O), Bit::O);
-    assert_eq!(bool_logic::and(Bit::O, Bit::I), Bit::O);
-    assert_eq!(bool_logic::and(Bit::I, Bit::O), Bit::O);
-    assert_eq!(bool_logic::and(Bit::I, Bit::I), Bit::I);
+    assert_eq!(bool_logic::and(0, 0), 0);
+    assert_eq!(bool_logic::and(0, 1), 0);
+    assert_eq!(bool_logic::and(1, 0), 0);
+    assert_eq!(bool_logic::and(1, 1), 1);
 }
 
 #[test]
 fn or_test() {
-    assert_eq!(bool_logic::or(Bit::O, Bit::O), Bit::O);
-    assert_eq!(bool_logic::or(Bit::O, Bit::I), Bit::I);
-    assert_eq!(bool_logic::or(Bit::I, Bit::O), Bit::I);
-    assert_eq!(bool_logic::or(Bit::I, Bit::I), Bit::I);
+    assert_eq!(bool_logic::or(0, 0), 0);
+    assert_eq!(bool_logic::or(0, 1), 1);
+    assert_eq!(bool_logic::or(1, 0), 1);
+    assert_eq!(bool_logic::or(1, 1), 1);
 }
 
 #[test]
 fn xor_test() {
-    assert_eq!(bool_logic::xor(Bit::O, Bit::O), Bit::O);
-    assert_eq!(bool_logic::xor(Bit::O, Bit::I), Bit::I);
-    assert_eq!(bool_logic::xor(Bit::I, Bit::O), Bit::I);
-    assert_eq!(bool_logic::xor(Bit::I, Bit::I), Bit::O);
+    assert_eq!(bool_logic::xor(0, 0), 0);
+    assert_eq!(bool_logic::xor(0, 1), 1);
+    assert_eq!(bool_logic::xor(1, 0), 1);
+    assert_eq!(bool_logic::xor(1, 1), 0);
 }
 
 #[test]
-fn multi_plexor_test() {
-    assert_eq!(bool_logic::multiplexor(Bit::O, Bit::O, Bit::O), Bit::O);
-    assert_eq!(bool_logic::multiplexor(Bit::O, Bit::I, Bit::O), Bit::O);
-    assert_eq!(bool_logic::multiplexor(Bit::I, Bit::O, Bit::O), Bit::I);
-    assert_eq!(bool_logic::multiplexor(Bit::I, Bit::I, Bit::O), Bit::I);
-    assert_eq!(bool_logic::multiplexor(Bit::O, Bit::O, Bit::I), Bit::O);
-    assert_eq!(bool_logic::multiplexor(Bit::O, Bit::I, Bit::I), Bit::I);
-    assert_eq!(bool_logic::multiplexor(Bit::I, Bit::O, Bit::I), Bit::O);
-    assert_eq!(bool_logic::multiplexor(Bit::I, Bit::I, Bit::I), Bit::I);
+fn mux_test() {
+    assert_eq!(bool_logic::mux(0, 0, 0), 0);
+    assert_eq!(bool_logic::mux(0, 1, 0), 0);
+    assert_eq!(bool_logic::mux(1, 0, 0), 1);
+    assert_eq!(bool_logic::mux(1, 1, 0), 1);
+    assert_eq!(bool_logic::mux(0, 0, 1), 0);
+    assert_eq!(bool_logic::mux(0, 1, 1), 1);
+    assert_eq!(bool_logic::mux(1, 0, 1), 0);
+    assert_eq!(bool_logic::mux(1, 1, 1), 1);
 }
 
 #[test]
-fn de_multi_plexor_test() {
-    assert_eq!(bool_logic::de_multiplexor(Bit::O, Bit::O), (Bit::O, Bit::O));
-    assert_eq!(bool_logic::de_multiplexor(Bit::I, Bit::O), (Bit::I, Bit::O));
-    assert_eq!(bool_logic::de_multiplexor(Bit::O, Bit::I), (Bit::O, Bit::O));
-    assert_eq!(bool_logic::de_multiplexor(Bit::I, Bit::I), (Bit::O, Bit::I));
+fn demux_test() {
+    assert_eq!(bool_logic::demux(0, 0), [0, 0]);
+    assert_eq!(bool_logic::demux(1, 0), [1, 0]);
+    assert_eq!(bool_logic::demux(0, 1), [0, 0]);
+    assert_eq!(bool_logic::demux(1, 1), [0, 1]);
+}
+
+#[test]
+fn not16_test() {
+    assert_eq!(bool_logic::not16(
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    );
+    assert_eq!(bool_logic::not16(
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]),
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    );
+    assert_eq!(bool_logic::not16(
+        [0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]),
+        [1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0],
+    );
+}
+
+#[test]
+fn and16_test() {
+    assert_eq!(bool_logic::and16(
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    );
+    assert_eq!(bool_logic::and16(
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]),
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    );
+    assert_eq!(bool_logic::and16(
+        [1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1],
+        [0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]),
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
+    );
+}
+
+#[test]
+fn or16_test() {
+    assert_eq!(bool_logic::or16(
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    );
+    assert_eq!(bool_logic::or16(
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]),
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    );
+    assert_eq!(bool_logic::or16(
+        [1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1],
+        [0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]),
+        [1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1],
+    );
+}
+
+#[test]
+fn or8way_test() {
+    assert_eq!(bool_logic::or8way(
+        [0, 0, 0, 0, 0, 0, 0, 0]),
+        0,
+    );
+    assert_eq!(bool_logic::or8way(
+        [1, 0, 0, 0, 0, 0, 0, 0]),
+        1,
+    );
+    assert_eq!(bool_logic::or8way(
+        [1, 1, 1, 1, 1, 1, 1, 1]),
+        1,
+    );
+    assert_eq!(bool_logic::or8way(
+        [1, 0, 0, 0, 0, 0, 0, 1]),
+        1,
+    );
+}
+
+#[test]
+fn mux4way16_test() {
+    assert_eq!(bool_logic::mux4way16(
+        [[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]],
+        [0, 0]),
+        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    );
+    assert_eq!(bool_logic::mux4way16(
+        [[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]],
+        [1, 0]),
+        [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    );
+    assert_eq!(bool_logic::mux4way16(
+        [[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]],
+        [0, 1]),
+        [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    );
+    assert_eq!(bool_logic::mux4way16(
+        [[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]],
+        [1, 1]),
+        [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    );
+}
+
+#[test]
+fn mux8way16_test() {
+    assert_eq!(bool_logic::mux8way16(
+        [[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0]],
+        [0, 0, 0]),
+        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    );
+    assert_eq!(bool_logic::mux8way16(
+        [[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0]],
+        [1, 0, 0]),
+        [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    );
+    assert_eq!(bool_logic::mux8way16(
+        [[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0]],
+        [0, 1, 0]),
+        [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    );
+    assert_eq!(bool_logic::mux8way16(
+        [[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0]],
+        [1, 1, 0]),
+        [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    );
+    assert_eq!(bool_logic::mux8way16(
+        [[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0]],
+        [0, 0, 1]),
+        [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    );
+    assert_eq!(bool_logic::mux8way16(
+        [[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0]],
+        [1, 0, 1]),
+        [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    );
+    assert_eq!(bool_logic::mux8way16(
+        [[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0]],
+        [0, 1, 1]),
+        [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    );
+    assert_eq!(bool_logic::mux8way16(
+        [[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0]],
+        [1, 1, 1]),
+        [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0]
+    );
+}
+
+#[test]
+fn demux4way_test() {
+    assert_eq!(bool_logic::demux4way(0, [0, 0]), [0, 0, 0, 0]);
+    assert_eq!(bool_logic::demux4way(1, [0, 0]), [1, 0, 0, 0]);
+    assert_eq!(bool_logic::demux4way(0, [1, 0]), [0, 0, 0, 0]);
+    assert_eq!(bool_logic::demux4way(1, [1, 0]), [0, 1, 0, 0]);
+    assert_eq!(bool_logic::demux4way(0, [0, 1]), [0, 0, 0, 0]);
+    assert_eq!(bool_logic::demux4way(1, [0, 1]), [0, 0, 1, 0]);
+    assert_eq!(bool_logic::demux4way(0, [1, 1]), [0, 0, 0, 0]);
+    assert_eq!(bool_logic::demux4way(1, [1, 1]), [0, 0, 0, 1]);
+}
+
+#[test]
+fn demux8way_test() {
+    assert_eq!(bool_logic::demux8way(0, [0, 0, 0]), [0, 0, 0, 0, 0, 0, 0, 0]);
+    assert_eq!(bool_logic::demux8way(1, [0, 0, 0]), [1, 0, 0, 0, 0, 0, 0, 0]);
+    assert_eq!(bool_logic::demux8way(0, [1, 0, 0]), [0, 0, 0, 0, 0, 0, 0, 0]);
+    assert_eq!(bool_logic::demux8way(1, [1, 0, 0]), [0, 1, 0, 0, 0, 0, 0, 0]);
+    assert_eq!(bool_logic::demux8way(0, [0, 1, 0]), [0, 0, 0, 0, 0, 0, 0, 0]);
+    assert_eq!(bool_logic::demux8way(1, [0, 1, 0]), [0, 0, 1, 0, 0, 0, 0, 0]);
+    assert_eq!(bool_logic::demux8way(0, [1, 1, 0]), [0, 0, 0, 0, 0, 0, 0, 0]);
+    assert_eq!(bool_logic::demux8way(1, [1, 1, 0]), [0, 0, 0, 1, 0, 0, 0, 0]);
+    assert_eq!(bool_logic::demux8way(0, [0, 0, 1]), [0, 0, 0, 0, 0, 0, 0, 0]);
+    assert_eq!(bool_logic::demux8way(1, [0, 0, 1]), [0, 0, 0, 0, 1, 0, 0, 0]);
+    assert_eq!(bool_logic::demux8way(0, [1, 0, 1]), [0, 0, 0, 0, 0, 0, 0, 0]);
+    assert_eq!(bool_logic::demux8way(1, [1, 0, 1]), [0, 0, 0, 0, 0, 1, 0, 0]);
+    assert_eq!(bool_logic::demux8way(0, [0, 1, 1]), [0, 0, 0, 0, 0, 0, 0, 0]);
+    assert_eq!(bool_logic::demux8way(1, [0, 1, 1]), [0, 0, 0, 0, 0, 0, 1, 0]);
+    assert_eq!(bool_logic::demux8way(0, [1, 1, 1]), [0, 0, 0, 0, 0, 0, 0, 0]);
+    assert_eq!(bool_logic::demux8way(1, [1, 1, 1]), [0, 0, 0, 0, 0, 0, 0, 1]);
 }
